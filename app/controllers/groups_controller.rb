@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
 
   # GET /groups/1
   def show
-    render json: @group
+      render json: @group
   end
 
   # POST /groups
@@ -19,6 +19,7 @@ class GroupsController < ApplicationController
 
     if @group.save
       render json: @group, status: :created, location: @group
+      puts "hello"
     else
       render json: @group.errors, status: :unprocessable_entity
     end
@@ -46,6 +47,6 @@ class GroupsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def group_params
-      params.require(:group).permit(:groupId, :groupName, :ownerId)
+      params.require(:group).permit(:groupId, :groupName, :ownerId)   
     end
 end
