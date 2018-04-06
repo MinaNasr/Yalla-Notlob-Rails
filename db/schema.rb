@@ -50,11 +50,9 @@ ActiveRecord::Schema.define(version: 20180404134605) do
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string "name", null: false
-    t.string "email", null: false
-    t.string "password"
-    t.string "profile_id"
-    t.string "token"
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
