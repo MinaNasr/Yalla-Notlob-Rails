@@ -27,7 +27,10 @@ class UsersController < ApplicationController
       params.permit(
         :name,
         :email,
-        :password
+        :password,
+        :api_type,
+        :api_token,
+        :profile_id
       )
     end
 

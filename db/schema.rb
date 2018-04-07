@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180404134605) do
+ActiveRecord::Schema.define(version: 20180407095337) do
 
   create_table "group_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.decimal "groupId", precision: 10
@@ -55,6 +55,9 @@ ActiveRecord::Schema.define(version: 20180404134605) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "profile_id"
+    t.string "api_token"
+    t.string "api_type"
   end
 
   add_foreign_key "order_details", "orders"
