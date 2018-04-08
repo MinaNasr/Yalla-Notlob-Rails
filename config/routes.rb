@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # mount Notifications::Engine => "/notifications"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   resources :order_details

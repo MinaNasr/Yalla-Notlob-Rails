@@ -14,8 +14,10 @@ class OrdersController < ApplicationController
   end
 
   # POST /orders
+  # done except for add friends/groups
   def create
     @order = Order.new(order_params)
+    @order.user_id = $user_id    
 
     if @order.save
       render json: @order, status: :created, location: @order
@@ -46,6 +48,6 @@ class OrdersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def order_params
-      params.require(:order).permit(:user_id, :meal_name, :image)
+      params.require(:order).permit(:meal_name, :image ,:restaurant_name) #.require(:order)
     end
 end

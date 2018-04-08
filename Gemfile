@@ -47,3 +47,5 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'jwt'
 
 gem 'simple_command'
+
+# gem 'notifications', '~> 0.6.0'
