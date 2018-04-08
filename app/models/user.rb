@@ -1,7 +1,5 @@
 class User < ApplicationRecord
 
-  has_many :users
-  belongs_to :user
 
   enum api_type: {facebook:"f",google:"g",website:"w"}
 
@@ -17,9 +15,16 @@ class User < ApplicationRecord
     super nil
   end
 
+  #hide ppassword_digest from json object
+  def as_json(options = {})
+    super(options.merge({ except: [:password_digest] }))
+  end
+
   #encrypt password
   has_secure_password
 
+  has_many :users
+  belongs_to :user
   has_many :groups
   has_many :orders
   has_many :order_details

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :friends
+
   # mount Notifications::Engine => "/notifications"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
@@ -10,4 +11,6 @@ Rails.application.routes.draw do
   resources :groups
   post 'auth/register', to: 'users#register'
   post 'auth/login', to: 'users#login'
+  post 'users/search', to: 'users#search'
+
 end

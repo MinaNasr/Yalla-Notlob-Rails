@@ -15,10 +15,14 @@ class UsersController < ApplicationController
     def login
       authenticate params[:email], params[:password]
     end
-    def test
-      render json: {
-            message: 'You have passed authentication and authorization test'
-          }
+
+    def search
+      @user  = User.find_by_email(params[:email])
+      if !@user.nil? 
+        render json: @user
+      else
+        render json: {message:"user not found"}
+      end
     end
   
     private
