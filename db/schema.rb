@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180408002155) do
+ActiveRecord::Schema.define(version: 20180408002826) do
 
   create_table "group_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.decimal "groupId", precision: 10
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(version: 20180408002155) do
   create_table "order_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.bigint "user_id"
     t.bigint "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_order_users_on_order_id"
     t.index ["user_id"], name: "index_order_users_on_user_id"
   end
@@ -110,7 +112,5 @@ ActiveRecord::Schema.define(version: 20180408002155) do
 
   add_foreign_key "order_details", "orders"
   add_foreign_key "order_details", "users"
-  add_foreign_key "order_users", "orders"
-  add_foreign_key "order_users", "users"
   add_foreign_key "orders", "users"
 end

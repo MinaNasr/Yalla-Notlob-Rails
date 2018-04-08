@@ -18,8 +18,21 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     @order.user_id = $user_id    
+    #convert group to users if group #not yet
+    #validate user_id includes in friend_list of user #not yet
+
+    #add user to order_users
 
     if @order.save
+      # @order_users.order_id = @order.id
+      puts order_users_params["users"]
+      
+      #invaite friends to order
+      order_users_params["users"].each do |order_user|
+        @order_user = OrderUser.new(user_id: order_user["user_id"] ,order_id: @order.id)
+        @order_user.save   
+      end
+
       render json: @order, status: :created, location: @order
     else
       render json: @order.errors, status: :unprocessable_entity
@@ -49,5 +62,9 @@ class OrdersController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def order_params
       params.require(:order).permit(:meal_name, :image ,:restaurant_name) #.require(:order)
+    end
+
+    def order_users_params
+      params.permit(users: [:user_id]) #.require(:order)
     end
 end
