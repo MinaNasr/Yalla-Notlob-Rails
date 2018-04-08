@@ -1,5 +1,8 @@
 class User < ApplicationRecord
 
+  has_many :users
+  belongs_to :user
+
   enum api_type: {facebook:"f",google:"g",website:"w"}
 
   #Validations

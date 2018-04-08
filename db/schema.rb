@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180408002826) do
+ActiveRecord::Schema.define(version: 20180408124244) do
+
+  create_table "friends", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.bigint "user_id"
+    t.bigint "friend_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "fk_rails_56804a6ce7"
+    t.index ["user_id"], name: "index_friends_on_user_id"
+  end
 
   create_table "group_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.decimal "groupId", precision: 10
@@ -110,6 +119,7 @@ ActiveRecord::Schema.define(version: 20180408002826) do
     t.string "api_type"
   end
 
+  add_foreign_key "friends", "users", column: "friend_id"
   add_foreign_key "order_details", "orders"
   add_foreign_key "order_details", "users"
   add_foreign_key "orders", "users"
