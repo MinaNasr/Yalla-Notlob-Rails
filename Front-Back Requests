@@ -1,0 +1,177 @@
+USER:
+    Register:
+        Method:POST
+        URL : http://localhost:3000/auth/register
+        Body : {
+            #required feilds
+            name:
+            email: (unique)
+            password:
+            api_type: one of this values [website, facebook, google]
+
+            #social media feilds
+            api_token:
+            profile_id:
+        }
+        Return : 
+        {
+            "message": "success"
+        }
+
+    Login:
+        Method:POST
+        URL : http://localhost:3000/auth/login
+        Body: {
+            email : {Registered email}
+            password: {true password}
+        }
+        Return:{
+        "access_token": ex: "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MjMzMDQ3ODJ9.DPLP6vJN413_igUPEaIbWLzt2CpHg9OjC6_jeGvvZWo",
+        "message": "success"
+        }
+
+
+GROUP:
+    Add Group:
+        Method:POST
+        URL:http://localhost:3000/groups/
+        Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+        }
+        Body:{
+                {
+                    "group":{
+                        "groupName":{group name ex:"IOT"}
+                    }
+                }
+        }
+        Return:{
+            group object created
+            ex:{
+                "id": 4,
+                "groupName": "IOT",
+                "created_at": "2018-04-09T18:05:41.000Z",
+                "updated_at": "2018-04-09T18:05:41.000Z",
+                "owner_id": 1
+            }
+        }
+
+    Add Friends to Group:
+        Method:POST
+        URL:http://localhost:3000/groups/add
+
+        Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+        }
+        Body:{
+                {
+                    "group":{
+                
+                        "group_id":1,
+                        "user_id":11
+                    }
+                }
+        }
+        Return:{
+            object of GroupDetail (group_member) 
+            ex:
+            {
+                "id": 8,
+                "created_at": "2018-04-09T18:16:36.000Z",
+                "updated_at": "2018-04-09T18:16:36.000Z",
+                "user_id": 11,
+                "group_id": 1
+            }
+
+            OR:
+            {message:"unauthorized"} if group doesn't belong to user
+        }
+
+    List Groups:
+        Method:GET
+        URL: http://localhost:3000/groups/
+        Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+        }
+        Return:{
+            array of Groups belongs to authenticated user 
+        }
+
+    List Group Members:
+        Method:GET
+        URL: http://localhost:3000/groups/members?group_id=1
+        Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+        }
+        Return:{
+            array of GroupDetail (group_members) 
+            OR {message:"unauthorized"} if group doesn't belong to user
+
+        }
+
+    Delete Group:
+        Method: DELETE 
+        URL:http://localhost:3000/groups/{id}
+        Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+        }
+        Return:{
+            {message:"success"}
+            or {message:"unauthorized"} if group doesn't belong to user
+        }
+
+FRIEND:
+    List My Friends:
+    Method:GET
+    URL: http://localhost:3000/friends
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Return:{
+        array of user friends
+    }
+
+    Search for user:
+        Method:POST
+        URL: http://localhost:3000/users/search
+        Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+        }
+        Body:{
+            email:
+        }
+        Return:{
+            object of user or {"message": "user not found"}
+        }
+    
+    Add Friend:
+    Method:POST
+    URL:http://localhost:3000/friends
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Body:{
+        {
+ 
+            "friend":
+                {
+                    "friend_id":5
+                }
+        }
+    }
+    Return:{
+        {message:"success"}
+    }
+
+    
+
+
+

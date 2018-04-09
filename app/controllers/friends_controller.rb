@@ -23,7 +23,7 @@ class FriendsController < ApplicationController
     render json: {} if User.find(friend_params[:friend_id]).nil?
     
     if @friend.save
-      render json: @friend, status: :created, location: @friend
+      render json: {message:"success"}
     else
       render json: @friend.errors, status: :unprocessable_entity
     end

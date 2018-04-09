@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
 
   # GET /groups
   def index
-    @groups = Group.all
+    @groups = Group.where(owner_id: $user_id)
 
     render json: @groups
   end
@@ -21,30 +21,48 @@ class GroupsController < ApplicationController
     @group = @user.groups.create(group_params)
    
     if @group.save
-      render json: @group, status: :created, location: @group
+      render json: {message:"success"}
     else
       render json: @group.errors, status: :unprocessable_entity
     end
   end
 
   def add_memeber
-    #except validate user_id is already in user friends 
-    @group_member = GroupDetail.new(group_member_params)
+    #check  group belongs to auth user
+    # &&  validate user_id is already in user friends 
+    puts $user_id
+    
+    @auth_user = User.find($user_id)
 
-    if @group_member.save
-      render json: @group_member, status: :created, location: @groups
+    if( @auth_user.groups.where( id:group_member_params[:group_id]).length > 0 && 
+      @auth_user.friends.where(friend_id: group_member_params[:user_id]).length > 0 )
+
+        @group_member = GroupDetail.new(group_member_params)
+
+        if @group_member.save
+          render json: {message:"success"}
+        else
+          render json: @group_member.errors, status: :unprocessable_entity
+        end
+
     else
-      render json: @group_member.errors, status: :unprocessable_entity
+      render json: {message:"unauthorized"}
     end
   end
 
   def list_members
+    #check  group belongs to auth user
+    if( User.find($user_id).groups.where( id: params[:group_id]).length > 0 )
 
-    @group_members = GroupDetail.where(group_id: params[:group_id])
-    if @group_members
-      render json: @group_members, status: :created, location: @groups
+      @group_members = GroupDetail.where( group_id: params[:group_id])
+      if @group_members
+        render json: @group_members, status: :created, location: @groups
+      else
+        render json: @group_members.errors, status: :unprocessable_entity
+      end
+
     else
-      render json: @group_members.errors, status: :unprocessable_entity
+      render json: {message:"unauthorized"}
     end
   end
   
@@ -60,7 +78,13 @@ class GroupsController < ApplicationController
 
   # DELETE /groups/1
   def destroy
-    @group.destroy
+    if( User.find($user_id).groups.where( id: params[:id]).length > 0 )
+       @group.destroy
+       render json: {message:"success"}
+
+    else
+      render json: {message:"unauthorized"}
+    end
   end
 
   private

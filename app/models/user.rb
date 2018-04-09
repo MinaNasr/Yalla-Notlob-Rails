@@ -23,8 +23,9 @@ class User < ApplicationRecord
   #encrypt password
   has_secure_password
 
-  has_many :users
-  belongs_to :user
+  has_many :friends
+  # has_many :objects, class_name: "object", foreign_key: "reference_id"
+  # belongs_to :user
   has_many :groups,foreign_key: :owner_id
   has_many :orders
   has_many :order_details

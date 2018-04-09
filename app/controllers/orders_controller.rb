@@ -69,7 +69,19 @@ class OrdersController < ApplicationController
   end
 
   #method for list friends in specific order
-  def list_order_friends
+  def list_members
+    @order_users = OrderUser.where(order_id: params[:order_id])
+    @users = [];
+    @order_users.each do |order_user|
+      @users.push(order_user.user)
+      
+    end
+    
+    if @users
+      render json: @users
+    else
+      render json: @users.errors, status: :unprocessable_entity
+    end
   end
   # PATCH/PUT /orders/1
   def update

@@ -4,8 +4,9 @@ class UsersController < ApplicationController
    # POST /register
     def register
       @user = User.create(user_params)
+      puts @user
      if @user.save
-      response = { message: 'User created successfully'}
+      response = { message: 'success'}
       render json: response, status: :created 
      else
       render json: @user.errors, status: :bad
@@ -44,7 +45,7 @@ class UsersController < ApplicationController
       if command.success?
         render json: {
           access_token: command.result,
-          message: 'Login Successful'
+          message: 'success'
         }
       else
         render json: { error: command.errors }, status: :unauthorized
