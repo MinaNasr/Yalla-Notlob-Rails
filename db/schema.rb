@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180408124244) do
+ActiveRecord::Schema.define(version: 20180408191636) do
 
   create_table "friends", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.bigint "user_id"
@@ -22,18 +22,20 @@ ActiveRecord::Schema.define(version: 20180408124244) do
   end
 
   create_table "group_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.decimal "groupId", precision: 10
-    t.decimal "userId", precision: 10
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.bigint "group_id"
+    t.index ["group_id"], name: "fk_rails_29625614ae"
+    t.index ["user_id"], name: "fk_rails_04c7ee0483"
   end
 
   create_table "groups", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.decimal "groupId", precision: 10
     t.string "groupName"
-    t.decimal "ownerId", precision: 10
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "owner_id"
+    t.index ["owner_id"], name: "fk_rails_5447bdb9c5"
   end
 
   create_table "notifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
@@ -120,6 +122,9 @@ ActiveRecord::Schema.define(version: 20180408124244) do
   end
 
   add_foreign_key "friends", "users", column: "friend_id"
+  add_foreign_key "group_details", "groups"
+  add_foreign_key "group_details", "users"
+  add_foreign_key "groups", "users", column: "owner_id"
   add_foreign_key "order_details", "orders"
   add_foreign_key "order_details", "users"
   add_foreign_key "orders", "users"

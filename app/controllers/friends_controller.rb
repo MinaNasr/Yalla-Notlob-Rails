@@ -4,7 +4,7 @@ class FriendsController < ApplicationController
   # GET /friends
   def index
     #list only friend of authenticated user
-    @friends = Friend.where("user_id" , $user_id)
+    @friends = Friend.where(user_id:  $user_id)
 
     render json: @friends
   end
