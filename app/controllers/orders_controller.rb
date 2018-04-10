@@ -119,13 +119,18 @@ class OrdersController < ApplicationController
   end
   # list latest orders
   def latestOrders
-    @order_users = OrderDetail.where(user_id: params[:user_id])
-    @comments = [];
+    @order_users = Order.select("meal_name","created_at").where(user_id: $user_id)
+    @meal_names = [];
+    @meal_times = [];
     @order_users.each do |order_user|
-      @comments.push(order_user.comment)
-      
+      @meal_names.push(order_user.meal_name)
+      @meal_times.push(order_user.created_at)
     end
-    render json: @comments
+    if @meal_names
+      render :json => {:meal_names => @meal_names,:meal_times => @meal_times}
+    else
+      render json: @meal_names.errors, status: :unprocessable_entity
+    end
   end
 
   def change_status
