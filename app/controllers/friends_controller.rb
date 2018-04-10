@@ -23,17 +23,24 @@ class FriendsController < ApplicationController
 
   # POST /friends
   def create
-    @friend = Friend.new(friend_params)
-    @friend.user_id = $user_id
-
-    #check if user exits before add him to friend list
-    render json: {} if User.find(friend_params[:friend_id]).nil?
-    
-    if @friend.save
-      render json: {message:"success"}
-    else
-      render json: @friend.errors, status: :unprocessable_entity
+    @user  = User.find_by_email(params[:email])
+    puts @user.nil?
+    if @user.nil? == true
+      puts 333
+      render json: {message:"not found"}
+      return 
     end
+
+      @friend = Friend.new(friend_id: @user[:id])
+      @friend.user_id = $user_id
+
+      #check if user exits before add him to friend list      
+      if @friend.save
+        render json: {message:"success"}
+      else
+        render json:{message:"fail"}
+   
+      end
   end
 
   # PATCH/PUT /friends/1
@@ -65,6 +72,6 @@ class FriendsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def friend_params
-      params.require(:friend).permit(:friend_id)
+      params.require(:friend).permit(:email)
     end
 end
