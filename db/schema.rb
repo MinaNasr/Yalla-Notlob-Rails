@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180409232244) do
+ActiveRecord::Schema.define(version: 20180410115705) do
 
   create_table "friends", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
     t.bigint "friend_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["friend_id"], name: "fk_rails_56804a6ce7"
+    t.index ["friend_id", "user_id"], name: "index_friends_on_friend_id_and_user_id", unique: true
     t.index ["user_id"], name: "index_friends_on_user_id"
   end
 
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20180409232244) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "group_id"
-    t.index ["group_id"], name: "fk_rails_29625614ae"
+    t.index ["group_id", "user_id"], name: "index_group_details_on_group_id_and_user_id", unique: true
     t.index ["user_id"], name: "fk_rails_04c7ee0483"
   end
 
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20180409232244) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "join", default: false
+    t.index ["order_id", "user_id"], name: "index_order_users_on_order_id_and_user_id", unique: true
     t.index ["order_id"], name: "index_order_users_on_order_id"
     t.index ["user_id"], name: "index_order_users_on_user_id"
   end
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 20180409232244) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "restaurant_name", null: false
+    t.string "status", default: "w"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 

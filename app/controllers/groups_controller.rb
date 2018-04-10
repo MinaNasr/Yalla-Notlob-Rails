@@ -50,8 +50,32 @@ class GroupsController < ApplicationController
     end
   end
 
+  def remove_memeber
+    #check  group belongs to auth user
+    # &&  validate user_id is already in user friends 
+    puts $user_id
+    
+    @auth_user = User.find($user_id)
+
+    if( @auth_user.groups.where( id:group_member_params[:group_id]).length > 0 && 
+      @auth_user.friends.where(friend_id: group_member_params[:user_id]).length > 0 )
+
+        @group_member = GroupDetail.where(group_member_params).destroy_all
+
+        if @group_member
+          render json: {message:"success"}
+        else
+          render json: @group_member.errors, status: :unprocessable_entity
+        end
+
+    else
+      render json: {message:"unauthorized"}
+    end
+  end
+
   def list_members
     #check  group belongs to auth user
+    #except return user objects
     if( User.find($user_id).groups.where( id: params[:group_id]).length > 0 )
 
       @group_members = GroupDetail.where( group_id: params[:group_id])
@@ -66,11 +90,6 @@ class GroupsController < ApplicationController
     end
   end
   
-
-
-
-
-
 
   # PATCH/PUT /groups/1
   def update
