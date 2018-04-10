@@ -41,9 +41,12 @@ class FriendsController < ApplicationController
   # DELETE /friends/1
   def destroy
     @auth_user = User.find($user_id)
-    puts params[:id]
-     @auth_user.friends.destroy(params[:id])
-    #@friend.destroy
+      
+    if  @auth_user.friends.destroy(params[:id])
+     render json:  {message:"success"}
+    else
+      render json: {message:"failed"}
+    end
   end
   
 

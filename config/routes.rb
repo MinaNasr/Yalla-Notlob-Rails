@@ -5,6 +5,8 @@ Rails.application.routes.draw do
  
   get 'groups/members', to:'groups#list_members'
   post 'groups/add', to: 'groups#add_memeber'
+  post 'groups/remove', to:'groups#remove_memeber'
+  
   post 'orders/remove_friend', to: 'orders#remove_friend'
   get 'orders/list', to: 'orders#list_members'
   post 'orders/change_status', to:'orders#change_status'

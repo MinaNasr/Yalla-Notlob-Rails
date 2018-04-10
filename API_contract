@@ -170,8 +170,35 @@ FRIEND:
     Return:{
         {message:"success"}
     }
+DELETE Friend:
+    Method:DELETE
+    URL:http://localhost:3000/friends/{id}
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Return:{
+        {message:"success"}
+    }
 
     
-
+Delete friend from group:
+Method:post
+    URL:http://localhost:3000/groups/remove
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Body:{
+        {
+            "group":{
+                "group_id":4,
+                "user_id":2
+            }
+        }
+    }
+    Return:{
+        {message:"success"}
+    }
 
 
