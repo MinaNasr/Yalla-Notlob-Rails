@@ -5,8 +5,15 @@ class FriendsController < ApplicationController
   def index
     #list only friend of authenticated user
     @friends = Friend.where(user_id:  $user_id)
+    puts json:@friends
+    @users  = [];
 
-    render json: @friends
+    
+    @friends.each do |friend|
+      @users.push( User.where(id: friend.friend_id) )
+    end
+    
+    render json: @users
   end
 
   # GET /friends/1
