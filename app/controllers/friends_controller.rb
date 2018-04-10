@@ -62,7 +62,24 @@ class FriendsController < ApplicationController
       render json: {message:"failed"}
     end
   end
-  
+
+  # latest activities of a certain user
+
+  def latestActivities
+    @friends = Friend.select("friend_id").where(user_id: $user_id)
+    @friends_activities = [];
+    @friends.each do |friend|
+      @name = (User.select("name").where(id: friend.friend_id))
+      @friends_activities.push(Order.select("meal_name","restaurant_name","status","created_at").where(user_id: friend.friend_id).limit(2).order("created_at"))
+    end
+    if @friends_activities
+      # @friends_activities.sort_by{|e| e[:created_at]}
+      render :json => {:friends_activities => @friends_activities}
+    else
+      render json: @friends_activities.errors, status: :unprocessable_entity
+    end
+  end    
+    
 
   private
     # Use callbacks to share common setup or constraints between actions.
