@@ -33,12 +33,14 @@ class GroupsController < ApplicationController
     
     @auth_user = User.find($user_id)
     @user  = User.find_by_email(params[:email])
+    puts params[:email]
+    puts params[:group_id]
+    puts @user[:id]
 
-
-    if( @auth_user.groups.where( id:params[:group_id]).length > 0 && 
+    if( @auth_user.groups.where( id: params[:group_id]).length > 0 && 
       @auth_user.friends.where(friend_id:  @user[:id]).length > 0 )
 
-        @group_member = GroupDetail.new(friend_id:  @user[:id] ,group_id: params[:group_id])
+        @group_member = GroupDetail.new(user_id:  @user[:id] ,group_id: params[:group_id])
 
         if @group_member.save
           render json: {message:"success"}
