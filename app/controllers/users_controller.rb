@@ -25,6 +25,15 @@ class UsersController < ApplicationController
         render json: {message:"user not found"}
       end
     end
+
+    def join_order
+      if @order_user = OrderUser.where(user_id: $user_id, order_id: params[:order_id])
+        .update_all(join: true) > 0
+      render json: {message:"success"}
+      else
+        render json: {message:"unauthorized"}
+      end
+    end
   
     private
   

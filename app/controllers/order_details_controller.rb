@@ -3,7 +3,8 @@ class OrderDetailsController < ApplicationController
 
   # GET /order_details
   def index
-    @order_details = OrderDetail.all
+    #no auth check
+    @order_details = OrderDetail.where(order_id: params[:order_id])
 
     render json: @order_details
   end
@@ -15,13 +16,21 @@ class OrderDetailsController < ApplicationController
 
   # POST /order_details
   def create
-    @order_detail = OrderDetail.new(order_detail_params)
+    #check if OrderUser for this order is exists
+    if(OrderUser.where(order_id: order_detail_params[:order_id],
+      user_id: order_detail_params[:user_id]).length > 0)
+     
+      @order_detail = OrderDetail.new(order_detail_params)
 
-    if @order_detail.save
-      render json: @order_detail, status: :created, location: @order_detail
-    else
-      render json: @order_detail.errors, status: :unprocessable_entity
+      if @order_detail.save
+        render json: @order_detail, status: :created, location: @order_detail
+      else
+        render json: @order_detail.errors, status: :unprocessable_entity
+      end
+    else 
+      render json: {message:"unauthorized"}
     end
+    
   end
 
   # PATCH/PUT /order_details/1

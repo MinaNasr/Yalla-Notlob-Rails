@@ -15,9 +15,10 @@ Rails.application.routes.draw do
   post 'auth/register', to: 'users#register'
   post 'auth/login', to: 'users#login'
   post 'users/search', to: 'users#search'
+  post 'users/join_order', to: 'users#join_order' 
 
   resources :friends
-  # resources :order_details
+  resources :order_details
   resources :orders
   resources :users
   # resources :group_details
