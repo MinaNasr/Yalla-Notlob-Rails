@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180410115705) do
+ActiveRecord::Schema.define(version: 20180410203009) do
 
   create_table "friends", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.bigint "user_id"
@@ -39,25 +39,16 @@ ActiveRecord::Schema.define(version: 20180410115705) do
   end
 
   create_table "notifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
-    t.string "target_type", null: false
-    t.bigint "target_id", null: false
-    t.string "notifiable_type", null: false
-    t.bigint "notifiable_id", null: false
-    t.string "key", null: false
-    t.string "group_type"
-    t.bigint "group_id"
-    t.integer "group_owner_id"
-    t.string "notifier_type"
-    t.bigint "notifier_id"
-    t.text "parameters"
-    t.datetime "opened_at"
+    t.bigint "user_id"
+    t.string "type"
+    t.boolean "order_finished", default: false
+    t.bigint "order_id"
+    t.string "user_name"
+    t.boolean "viewed", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["group_owner_id"], name: "index_notifications_on_group_owner_id"
-    t.index ["group_type", "group_id"], name: "index_notifications_on_group_type_and_group_id"
-    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
-    t.index ["notifier_type", "notifier_id"], name: "index_notifications_on_notifier_type_and_notifier_id"
-    t.index ["target_type", "target_id"], name: "index_notifications_on_target_type_and_target_id"
+    t.index ["order_id"], name: "index_notifications_on_order_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "order_details", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
