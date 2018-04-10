@@ -3,7 +3,7 @@ class OrdersController < ApplicationController
 
   # GET /orders
   def index
-    @orders = Order.all
+    @orders = Order.where(user_id: $user_id)
 
     render json: @orders
   end
@@ -81,6 +81,10 @@ class OrdersController < ApplicationController
     end
   end
 
+
+
+
+
   #method for list friends in specific order
   def list_members
     @order_users = OrderUser.where(order_id: params[:order_id])
@@ -96,6 +100,16 @@ class OrdersController < ApplicationController
       render json: @users.errors, status: :unprocessable_entity
     end
   end
+
+  def change_status
+    @order =Order.find(change_status_params[:order_id])
+    if @order.update_column(:status, change_status_params[:status]) 
+      render json: {orders: Order.where(user_id: $user_id)}
+    else
+      render json: {message:"failed"}
+    end
+  end
+  
   # PATCH/PUT /orders/1
   def update
     if @order.update(order_params)
@@ -128,5 +142,9 @@ class OrdersController < ApplicationController
 
     def order_remove_user_params
       params.permit(:order_id,:friend_id)
+    end
+
+    def change_status_params
+      params.permit(:order_id,:status)
     end
 end

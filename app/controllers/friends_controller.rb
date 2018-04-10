@@ -40,8 +40,12 @@ class FriendsController < ApplicationController
 
   # DELETE /friends/1
   def destroy
-    @friend.destroy
+    @auth_user = User.find($user_id)
+    puts params[:id]
+     @auth_user.friends.destroy(params[:id])
+    #@friend.destroy
   end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.
