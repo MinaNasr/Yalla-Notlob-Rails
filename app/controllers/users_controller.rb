@@ -26,6 +26,11 @@ class UsersController < ApplicationController
       end
     end
 
+    def get_data
+      render json: User.select("name, email").find($user_id)
+    end
+    
+
     def join_order
       if @order_user = OrderUser.where(user_id: $user_id, order_id: params[:order_id])
         .update_all(join: true) > 0

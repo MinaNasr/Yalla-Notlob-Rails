@@ -1,4 +1,12 @@
 USER:
+    Check Auth:
+        Method:GET
+        URL: http://localhost:3000/users/auth
+        Return:{
+            name:
+            email:
+        }
+
     Register:
         Method:POST
         URL : http://localhost:3000/auth/register
