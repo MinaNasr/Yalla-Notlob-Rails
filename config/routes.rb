@@ -3,6 +3,12 @@ Rails.application.routes.draw do
   # mount Notifications::Engine => "/notifications"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
  
+  # action cable server URI
+  mount ActionCable.server => '/cable'
+  
+  # get all notifications for a user
+  get 'users/:user_id/notifications', to: 'notifications#get_all_notifications'
+
   get 'groups/members', to:'groups#list_members'
   post 'groups/add', to: 'groups#add_memeber'
   post 'groups/remove', to:'groups#remove_memeber'

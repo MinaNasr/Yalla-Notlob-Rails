@@ -45,7 +45,7 @@ class OrdersController < ApplicationController
     if @order.save
       # @order_users.order_id = @order.id
       @invited_friends  = []
-      @auth_user = User.find($user_id)
+      @auth_user = User.find_by_id($user_id)
 
       #invaite friends to order
       puts json:  order_users_params[:users]
@@ -55,23 +55,35 @@ class OrdersController < ApplicationController
           @order_user = OrderUser.new(user_id: order_user[:user_id] ,order_id: @order.id)
           @invited_friends.push (User.find(order_user[:user_id]) )
           @order_user.save   
+          puts 33333333333
+          @notif = Notification.create(user_id: order_user[:user_id], notif_type: "invite", 
+                              order_finished: false, order_id: @order[:id],
+                              name: @auth_user.name, viewed: false)
+          p @notif
+          if @notif.save
+              ActionCable.server.broadcast "notifications_#{friend}",{
+                  notif_type: "invite",
+                  order_id: @order[:id],
+                  name: @auth_user.name
+              }                       
+              
+          end
         end
 
       end
 
-        #convert group to users if group
-        # order_users_params["groups"].each do |group|
-        #   # @group = Group.find(group["group_id"])
-        #   if(@auth_user.groups.where(id:group[:group_id]).length > 0)
-        #       @group_details = GroupDetail.where(group_id: group[:group_id])
-        #       #get all group memebers and add them to this order
-        #       @group_details.each do |group_record|
-        #         @invited_friends.push( group_record.user )
-        #         @order_user = OrderUser.new(user_id: group_record.user.id ,order_id: @order.id)
-        #         @order_user.save  
-        #       end   
-        #   end
-        #end
+      #optimize this query
+      @all_users = User.all
+      @all_users.each { |u|
+        #send notif to all users that has order owner as a friend 
+          if  Friend.where(user_id: u[:id] , friend_id: $user_id).length > 0
+                  ActionCable.server.broadcast "activities_#{u.id}",{
+                  order_id: @order[:id],
+                  name: @auth_user.name,
+                  restaurant: @order.restaurant_name,
+                  } 
+          end
+      }
 
       render json: {message:"success"} #[order: @order,invited_friends: @invited_friends], status: :created, location: @order
     else
