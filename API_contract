@@ -179,11 +179,14 @@ FRIEND:
         {message:"success"}
     }
 DELETE Friend:
-    Method:DELETE
-    URL:http://localhost:3000/friends/{id}
+    Method:POST
+    URL:http://localhost:3000/friends/delete
     Headers:{
             Content-Type:application/json
             Authorization: Barear {access_token which returned from login}
+    }
+    Body:{
+        id:
     }
     Return:{
         {message:"success"}
@@ -334,3 +337,6 @@ Get order details:
     Return:{
         array of order_details object
     }
+Get order users:
+    Method:GET
+    URL:http://localhost:3000/orders/list?order_id=133
