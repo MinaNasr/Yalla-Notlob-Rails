@@ -90,6 +90,11 @@ class GroupsController < ApplicationController
   end
   
 
+
+
+
+
+
   # PATCH/PUT /groups/1
   def update
     if @group.update(group_params)
