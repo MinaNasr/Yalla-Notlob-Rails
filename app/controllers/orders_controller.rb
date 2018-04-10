@@ -96,6 +96,16 @@ class OrdersController < ApplicationController
       render json: @users.errors, status: :unprocessable_entity
     end
   end
+  # list latest orders
+  def latestOrders
+    @order_users = OrderDetail.where(user_id: params[:user_id])
+    @comments = [];
+    @order_users.each do |order_user|
+      @comments.push(order_user.comment)
+      
+    end
+    render json: @comments
+  end
   # PATCH/PUT /orders/1
   def update
     if @order.update(order_params)
