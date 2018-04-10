@@ -326,4 +326,11 @@ Change Order Status [finished,canceled]:
     
 Get order details:
     Method:GET
-    
+    URL: http://localhost:3000/order_details?order_id=128
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Return:{
+        array of order_details object
+    }

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get 'users/auth', to: 'users#get_data'
   post 'users/search', to: 'users#search'
   post 'users/join_order', to: 'users#join_order' 
+  post 'friends/delete', to:'friends#delete'
 
   resources :friends
   resources :order_details
