@@ -209,4 +209,121 @@ Method:post
         {message:"success"}
     }
 
+Orders:
+    Method: POST
+    URL:http://localhost:3000/orders
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Body:{
+        {
+            "order":{
+                "meal_name":"dinner",
+                "image":"dddd",
+                "restaurant_name":"Mac"
+            },
+            "users":
+                [
+                    {"user_id":9},
+                    {"user_id":2}
+                ]
+            
+        }
+    }
+    Return:{
+       [
+            {
+                "order": {
+                    "id": 129,
+                    "user_id": 1,
+                    "meal_name": "dinner",
+                    "image": "33",
+                    "created_at": "2018-04-10T12:29:50.000Z",
+                    "updated_at": "2018-04-10T12:29:50.000Z",
+                    "restaurant_name": "sob7y",
+                    "status": "waiting"
+                },
+                "invited_friends": []
+            }
+]
+    }
 
+GET USER ORDERS :
+    Method: GET
+    URL:http://localhost:3000/orders
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+   
+    Return:{
+       [
+    [
+        {
+            "id": 72,
+            "user_id": 1,
+            "meal_name": "beakfast",
+            "image": "333",
+            "created_at": "2018-04-09T00:55:50.000Z",
+            "updated_at": "2018-04-09T00:55:50.000Z",
+            "restaurant_name": "mac",
+            "status": "waiting"
+        },
+        {
+            "id": 73,
+            "user_id": 1,
+            "meal_name": "beakfast",
+            "image": "333",
+            "created_at": "2018-04-09T00:56:20.000Z",
+            "updated_at": "2018-04-09T00:56:20.000Z",
+            "restaurant_name": "mac",
+            "status": "waiting"
+        },
+        {
+            "id": 74,
+            "user_id": 1,
+            "meal_name": "beakfast",
+            "image": "333",
+            "created_at": "2018-04-09T00:58:09.000Z",
+            "updated_at": "2018-04-09T00:58:09.000Z",
+            "restaurant_name": "mac",
+            "status": "waiting"
+        }
+      
+    ],
+    {
+        "joined": [
+            0,
+            0,
+            0
+        ],
+        "invited": [
+            1,
+            1,
+            1
+        ]
+    }
+]
+    }
+
+Change Order Status [finished,canceled]:
+    Method:POST
+    URL:http://localhost:3000/orders/change_status
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Body:{
+        {
+            "order_id":133,
+            "status":"w"
+        }
+    }
+    Return:{
+        {array of user orders}
+    }
+    
+Get order details:
+    Method:GET
+    

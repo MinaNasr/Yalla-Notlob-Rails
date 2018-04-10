@@ -75,6 +75,7 @@ class GroupsController < ApplicationController
 
   def list_members
     #check  group belongs to auth user
+    #except return user objects
     if( User.find($user_id).groups.where( id: params[:group_id]).length > 0 )
 
       @group_members = GroupDetail.where( group_id: params[:group_id])

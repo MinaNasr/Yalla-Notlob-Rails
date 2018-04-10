@@ -4,8 +4,25 @@ class OrdersController < ApplicationController
   # GET /orders
   def index
     @orders = Order.where(user_id: $user_id)
+    # puts json: @orders
+    @joined_members = [];
+    @invited_friends =[];
 
-    render json: @orders
+    
+    @orders.each do |order|
+      # @orders[index].attributes.merge(:ss => "dd") 
+      # {@orders[index] =>  @orders[index].attributes.merge( :oooooooo => 55 )}
+      # render json: { ad:  @orders[index].attributes.merge( :oooooooo => 555)} 
+
+      # puts json: @orders[index]
+
+      @joined_members.push(OrderUser.where(order_id: order[:id] , join: true).select(:id).count)
+      @invited_friends.push(OrderUser.where(order_id: order[:id] , join: false).select(:id).count)
+    end
+    
+    
+    
+    render json: [@orders, "joined" => @joined_members,"invited" => @invited_friends]
   end
 
   # GET /orders/1
@@ -43,20 +60,20 @@ class OrdersController < ApplicationController
       end
 
         #convert group to users if group
-        order_users_params["groups"].each do |group|
-          # @group = Group.find(group["group_id"])
-          if(@auth_user.groups.where(id:group[:group_id]).length > 0)
-              @group_details = GroupDetail.where(group_id: group[:group_id])
-              #get all group memebers and add them to this order
-              @group_details.each do |group_record|
-                @invited_friends.push( group_record.user )
-                @order_user = OrderUser.new(user_id: group_record.user.id ,order_id: @order.id)
-                @order_user.save  
-              end   
-          end
-        end
+        # order_users_params["groups"].each do |group|
+        #   # @group = Group.find(group["group_id"])
+        #   if(@auth_user.groups.where(id:group[:group_id]).length > 0)
+        #       @group_details = GroupDetail.where(group_id: group[:group_id])
+        #       #get all group memebers and add them to this order
+        #       @group_details.each do |group_record|
+        #         @invited_friends.push( group_record.user )
+        #         @order_user = OrderUser.new(user_id: group_record.user.id ,order_id: @order.id)
+        #         @order_user.save  
+        #       end   
+        #   end
+        #end
 
-      render json: [order: @order,invited_friends: @invited_friends], status: :created, location: @order
+      render json: {message:"success"} #[order: @order,invited_friends: @invited_friends], status: :created, location: @order
     else
       render json: @order.errors, status: :unprocessable_entity
     end
@@ -112,8 +129,14 @@ class OrdersController < ApplicationController
   
   # PATCH/PUT /orders/1
   def update
-    if @order.update(order_params)
-      render json: @order
+    puts params[:status]
+
+    if @order.update(params[:status])
+      if @order.update_column(:status, params[:status]) 
+        render json: {orders: Order.where(user_id: $user_id)}
+      else
+        render json: {message:"failed"}
+      end
     else
       render json: @order.errors, status: :unprocessable_entity
     end
