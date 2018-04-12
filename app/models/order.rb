@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  default_scope { order(created_at: :desc) }
 
   enum status: {waiting:"w",finished:"f",canceled:"c"}
 
