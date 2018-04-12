@@ -30,7 +30,7 @@ class OrderDetailsController < ApplicationController
       @order_detail = OrderDetail.new(order_detail_params)
 
       if @order_detail.save
-        render json: @order_detail, status: :created, location: @order_detail
+        render json: {"message": "success"}
       else
         render json: @order_detail.errors, status: :unprocessable_entity
       end

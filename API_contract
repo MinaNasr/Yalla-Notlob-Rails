@@ -324,7 +324,7 @@ Change Order Status [finished,canceled]:
         }
     }
     Return:{
-        {array of user orders}
+        {array of order details , array of invited, joined}
     }
     
 Get order details:
@@ -417,4 +417,43 @@ Get Order joined users
                         "name": "rania"
                     }
     }}
+    }
+
+
+add order item
+    Method:POST
+    URL:http://localhost:3000/order_details/
+     
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+
+    Body:{
+        {
+            "order_detail":{
+            "order_id":128,
+            "user_id":2,
+            "item_name":"fooool",
+            "price":2,
+            "comment":""
+         }
+         
+    Return:{
+        {
+            array of order_users {
+                    "id": 76,
+                    "user_id": 2,
+                    "order_id": 133,
+                    "created_at": "2018-04-10T12:39:06.000Z",
+                    "updated_at": "2018-04-10T12:39:06.000Z",
+                    "join": false,
+                    "user": {
+                        "id": 2,
+                        "name": "rania"
+                    }
+    }}
+    }
+ 
+}
     }

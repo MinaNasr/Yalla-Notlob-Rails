@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
       # puts json: @orders[index]
 
       @joined_members.push(OrderUser.where(order_id: order[:id] , join: true).select(:id).count)
-      @invited_friends.push(OrderUser.where(order_id: order[:id] , join: false).select(:id).count)
+      @invited_friends.push(OrderUser.where(order_id: order[:id] ).select(:id).count)
     end
     
     
@@ -130,8 +130,18 @@ class OrdersController < ApplicationController
 
   def change_status
     @order =Order.find(change_status_params[:order_id])
+
     if @order.update_column(:status, change_status_params[:status]) 
-      render json: {orders: Order.where(user_id: $user_id)}
+      @orders = Order.where(user_id: $user_id)
+      @joined_members = [];
+      @invited_friends =[];
+      
+      @orders.each do |order|
+        @joined_members.push(OrderUser.where(order_id: order[:id] , join: true).select(:id).count)
+        @invited_friends.push(OrderUser.where(order_id: order[:id] ).select(:id).count)
+      end
+      
+      render json: [@orders, "joined" => @joined_members,"invited" => @invited_friends]
     else
       render json: {message:"failed"}
     end
