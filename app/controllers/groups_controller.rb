@@ -80,8 +80,12 @@ class GroupsController < ApplicationController
     #check  group belongs to auth user
     #except return user objects
     if( User.find($user_id).groups.where( id: params[:group_id]).length > 0 )
-
-      @group_members = GroupDetail.where( group_id: params[:group_id])
+      @group_members = [];
+      @group_details = GroupDetail.where(group_id: params[:group_id])
+      @group_details.each do |member|
+        @group_members.push(member.user)
+      end
+      
       if @group_members
         render json: @group_members, status: :created, location: @groups
       else
