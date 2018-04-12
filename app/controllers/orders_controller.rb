@@ -112,23 +112,6 @@ class OrdersController < ApplicationController
 
 
 
-
-
-  #method for list friends in specific order
-  def list_members
-    @order_users = OrderUser.where(order_id: params[:order_id])
-    @users = [];
-    @order_users.each do |order_user|
-      @users.push(order_user.user)
-      
-    end
-    
-    if @users
-      render json: @users
-    else
-      render json: @users.errors, status: :unprocessable_entity
-    end
-  end
   # list latest orders
   def latestOrders
     @order_users = Order.select("meal_name","created_at").where(user_id: $user_id)
@@ -172,6 +155,17 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   def destroy
     @order.destroy
+  end
+
+  def get_invited
+    @invited_friends  = OrderUser.where(order_id: params[:order_id])
+    render json: @invited_friends,include: 'user'
+    
+  end
+
+  def get_joined
+    @joined_friends  = OrderUser.where(order_id: params[:order_id],join: true)
+    render json: @joined_friends,include: 'user'
   end
 
   private

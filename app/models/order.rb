@@ -4,6 +4,7 @@ class Order < ApplicationRecord
   enum status: {waiting:"w",finished:"f",canceled:"c"}
 
   belongs_to :user
+  
   validates_presence_of :meal_name, :image, :restaurant_name
 
 

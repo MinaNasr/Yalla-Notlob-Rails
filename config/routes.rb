@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   get 'orders/list', to: 'orders#list_members'
   post 'orders/change_status', to:'orders#change_status'
   get 'orders/latestOrders', to:'orders#latestOrders'
+  
+  get 'orders/invited', to: 'orders#get_invited'
+  get 'orders/joined', to: 'orders#get_joined'
+
   get 'friends/latestActivities', to:'friends#latestActivities'
 
   # post 'orders/invite_friend', to: 'orders#invite_friend'

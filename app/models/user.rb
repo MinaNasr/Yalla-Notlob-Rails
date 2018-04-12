@@ -1,5 +1,7 @@
 class User < ApplicationRecord
 
+  # attribute  :name
+
 
   enum api_type: {facebook:"f",google:"g",website:"w"}
 
@@ -15,9 +17,9 @@ class User < ApplicationRecord
     super nil
   end
 
-  #hide ppassword_digest from json object
+  #hide password_digest from json object
   def as_json(options = {})
-    super(options.merge({ except: [:password_digest] }))
+    super(options.merge({ except: [:password_digest,:created_at,:updated_at,:api_type,:api_token] }))
   end
 
   #encrypt password

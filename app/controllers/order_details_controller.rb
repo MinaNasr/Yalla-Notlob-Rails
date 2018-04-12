@@ -5,8 +5,15 @@ class OrderDetailsController < ApplicationController
   def index
     #no auth check
     @order_details = OrderDetail.where(order_id: params[:order_id])
+   
+    @joined_members = 0;
+    @invited_members = 0;
+    #return array of invited (users) with count , joined (users) with count
+    @joined_members= OrderUser.where(order_id: params[:order_id] , join: true).select(:id).count
+    @invited_members = OrderUser.where(order_id: params[:order_id] , join: false).select(:id).count
 
-    render json: @order_details
+    render json:  {'order_details'=> @order_details,joined: @joined_members,invited: @invited_members }
+     
   end
 
   # GET /order_details/1
