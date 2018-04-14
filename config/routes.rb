@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   resources :order_details
   resources :orders
   resources :users
-  # resources :group_details
+  resources :group_details
   resources :groups
   # mounting action cable server
   mount ActionCable.server => '/cable'

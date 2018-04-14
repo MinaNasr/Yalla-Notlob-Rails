@@ -1,7 +1,7 @@
 class ActivityChannel < ApplicationCable::Channel
   def subscribed
     # stream_from "some_channel"
-    stream_from "activities_#{$user_id}"
+    stream_from "activities_#{current_user.id}"
 
   end
 

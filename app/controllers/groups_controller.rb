@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
 
   # GET /groups
   def index
-    @groups = Group.where(owner_id: $user_id)
+    @groups = Group.where(owner_id: $user_id).includes(:user)
 
     render json: @groups
   end

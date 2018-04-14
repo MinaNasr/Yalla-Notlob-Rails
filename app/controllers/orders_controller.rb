@@ -54,8 +54,9 @@ class OrdersController < ApplicationController
         if(@auth_user.friends.where(friend_id: order_user[:user_id]).length > 0 )
           @order_user = OrderUser.new(user_id: order_user[:user_id] ,order_id: @order.id)
           @invited_friends.push (User.find(order_user[:user_id]) )
-          @order_user.save   
-          puts 33333333333
+          @order_user.save 
+          
+          
           @notif = Notification.create(user_id: order_user[:user_id], notif_type: "invite", 
                               order_finished: false, order_id: @order[:id],
                               name: @auth_user.name, viewed: false)
@@ -72,6 +73,18 @@ class OrdersController < ApplicationController
 
       end
 
+       #convert group to users if group
+       order_users_params["groups"].each do |group|
+        # @group = Group.find(group["group_id"])
+        @group_details = GroupDetail.where(group_id: group["group_id"])
+        #get all group memebers and add them to this order
+        @group_details.each do |group_record|
+          @invited_friends.push( group_record.user )
+          @order_user = OrderUser.new(user_id: group_record.user.id ,order_id: @order.id)
+          @order_user.save  
+        end   
+      end
+
       #optimize this query
       @all_users = User.all
       @all_users.each { |u|
@@ -84,6 +97,8 @@ class OrdersController < ApplicationController
                   } 
           end
       }
+
+
 
       render json: {message:"success"} #[order: @order,invited_friends: @invited_friends], status: :created, location: @order
     else
