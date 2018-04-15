@@ -440,7 +440,8 @@ add order item
             "user_id":2,
             "item_name":"fooool",
             "price":2,
-            "comment":""
+            "comment":"",
+            "amount":2
          }
          
     Return:{
