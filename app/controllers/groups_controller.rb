@@ -18,6 +18,7 @@ class GroupsController < ApplicationController
 
     @user=  User.find_by_id($user_id)
 
+    puts json: group_params
     @group = @user.groups.create(group_params)
    
     if @group.save
