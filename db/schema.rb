@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20180410203009) do
     t.index ["owner_id"], name: "fk_rails_5447bdb9c5"
   end
 
-  create_table "notifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "notifications", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
     t.string "type"
     t.boolean "order_finished", default: false

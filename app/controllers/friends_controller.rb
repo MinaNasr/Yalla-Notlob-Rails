@@ -66,15 +66,19 @@ class FriendsController < ApplicationController
   # latest activities of a certain user
 
   def latestActivities
-    @friends = Friend.select("friend_id").where(user_id: $user_id)
+    @friends = Friend.all.where(user_id: $user_id)
     @friends_activities = [];
     @friends.each do |friend|
-      @name = (User.select("name").where(id: friend.friend_id))
-      @friends_activities.push(Order.select("meal_name","restaurant_name","status","created_at").where(user_id: friend.friend_id).limit(2).order("created_at"))
+      @friend_activities = {};
+      name = (User.select("name").where(id: friend.friend_id))
+      @friend_activities[:freind_name]=name
+      @friend_orders=Order.select("meal_name","restaurant_name","status","created_at").where(user_id: friend.friend_id).limit(2).order("created_at Desc")
+      @friend_activities[:friend_orders]=@friend_orders
+      @friends_activities.push @friend_orders
     end
     if @friends_activities
-      # @friends_activities.sort_by{|e| e[:created_at]}
-      render :json => {:friends_activities => @friends_activities}
+      # render :json => {:friends_activities => @friends_activities}
+      render json: @friends_activities
     else
       render json: @friends_activities.errors, status: :unprocessable_entity
     end

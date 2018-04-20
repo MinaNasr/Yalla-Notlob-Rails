@@ -131,7 +131,7 @@ class OrdersController < ApplicationController
   end
   # list latest orders
   def latestOrders
-    @order_users = Order.select("meal_name","created_at").where(user_id: $user_id)
+    @order_users = Order.select("meal_name","created_at").where(user_id: $user_id).limit(3)
     @meal_names = [];
     @meal_times = [];
     @order_users.each do |order_user|
