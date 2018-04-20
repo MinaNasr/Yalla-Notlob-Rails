@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
       # puts json: @orders[index]
 
       @joined_members.push(OrderUser.where(order_id: order[:id] , join: true).select(:id).count)
-      @invited_friends.push(OrderUser.where(order_id: order[:id] , join: false).select(:id).count)
+      @invited_friends.push(OrderUser.where(order_id: order[:id] ).select(:id).count)
     end
     
     
@@ -54,8 +54,9 @@ class OrdersController < ApplicationController
         if(@auth_user.friends.where(friend_id: order_user[:user_id]).length > 0 )
           @order_user = OrderUser.new(user_id: order_user[:user_id] ,order_id: @order.id)
           @invited_friends.push (User.find(order_user[:user_id]) )
-          @order_user.save   
-          puts 33333333333
+          @order_user.save 
+          
+          
           @notif = Notification.create(user_id: order_user[:user_id], notif_type: "invite", 
                               order_finished: false, order_id: @order[:id],
                               name: @auth_user.name, viewed: false)
@@ -72,6 +73,18 @@ class OrdersController < ApplicationController
 
       end
 
+       #convert group to users if group
+       order_users_params["groups"].each do |group|
+        # @group = Group.find(group["group_id"])
+        @group_details = GroupDetail.where(group_id: group["group_id"])
+        #get all group memebers and add them to this order
+        @group_details.each do |group_record|
+          @invited_friends.push( group_record.user )
+          @order_user = OrderUser.new(user_id: group_record.user.id ,order_id: @order.id)
+          @order_user.save  
+        end   
+      end
+
       #optimize this query
       @all_users = User.all
       @all_users.each { |u|
@@ -84,6 +97,8 @@ class OrdersController < ApplicationController
                   } 
           end
       }
+
+
 
       render json: {message:"success"} #[order: @order,invited_friends: @invited_friends], status: :created, location: @order
     else
@@ -112,23 +127,6 @@ class OrdersController < ApplicationController
 
 
 
-
-
-  #method for list friends in specific order
-  def list_members
-    @order_users = OrderUser.where(order_id: params[:order_id])
-    @users = [];
-    @order_users.each do |order_user|
-      @users.push(order_user.user)
-      
-    end
-    
-    if @users
-      render json: @users
-    else
-      render json: @users.errors, status: :unprocessable_entity
-    end
-  end
   # list latest orders
   def latestOrders
     @order_users = Order.select("meal_name","created_at").where(user_id: $user_id).limit(3)
@@ -147,8 +145,18 @@ class OrdersController < ApplicationController
 
   def change_status
     @order =Order.find(change_status_params[:order_id])
+
     if @order.update_column(:status, change_status_params[:status]) 
-      render json: {orders: Order.where(user_id: $user_id)}
+      @orders = Order.where(user_id: $user_id)
+      @joined_members = [];
+      @invited_friends =[];
+      
+      @orders.each do |order|
+        @joined_members.push(OrderUser.where(order_id: order[:id] , join: true).select(:id).count)
+        @invited_friends.push(OrderUser.where(order_id: order[:id] ).select(:id).count)
+      end
+      
+      render json: [@orders, "joined" => @joined_members,"invited" => @invited_friends]
     else
       render json: {message:"failed"}
     end
@@ -172,6 +180,17 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   def destroy
     @order.destroy
+  end
+
+  def get_invited
+    @invited_friends  = OrderUser.where(order_id: params[:order_id])
+    render json: @invited_friends,include: 'user'
+    
+  end
+
+  def get_joined
+    @joined_friends  = OrderUser.where(order_id: params[:order_id],join: true)
+    render json: @joined_friends,include: 'user'
   end
 
   private

@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
 
   # GET /groups
   def index
-    @groups = Group.where(owner_id: $user_id)
+    @groups = Group.where(owner_id: $user_id).includes(:user)
 
     render json: @groups
   end
@@ -18,6 +18,7 @@ class GroupsController < ApplicationController
 
     @user=  User.find_by_id($user_id)
 
+    puts json: group_params
     @group = @user.groups.create(group_params)
    
     if @group.save
@@ -30,14 +31,17 @@ class GroupsController < ApplicationController
   def add_memeber
     #check  group belongs to auth user
     # &&  validate user_id is already in user friends 
-    puts $user_id
     
     @auth_user = User.find($user_id)
+    @user  = User.find_by_email(params[:email])
+    puts params[:email]
+    puts params[:group_id]
+    puts @user[:id]
 
-    if( @auth_user.groups.where( id:group_member_params[:group_id]).length > 0 && 
-      @auth_user.friends.where(friend_id: group_member_params[:user_id]).length > 0 )
+    if( @auth_user.groups.where( id: params[:group_id]).length > 0 && 
+      @auth_user.friends.where(friend_id:  @user[:id]).length > 0 )
 
-        @group_member = GroupDetail.new(group_member_params)
+        @group_member = GroupDetail.new(user_id:  @user[:id] ,group_id: params[:group_id])
 
         if @group_member.save
           render json: {message:"success"}
@@ -77,8 +81,12 @@ class GroupsController < ApplicationController
     #check  group belongs to auth user
     #except return user objects
     if( User.find($user_id).groups.where( id: params[:group_id]).length > 0 )
-
-      @group_members = GroupDetail.where( group_id: params[:group_id])
+      @group_members = [];
+      @group_details = GroupDetail.where(group_id: params[:group_id])
+      @group_details.each do |member|
+        @group_members.push(member.user)
+      end
+      
       if @group_members
         render json: @group_members, status: :created, location: @groups
       else

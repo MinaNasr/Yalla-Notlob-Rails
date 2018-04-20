@@ -230,6 +230,10 @@ Orders:
                 [
                     {"user_id":9},
                     {"user_id":2}
+                ],
+            "groups":[
+                {"group_id":4},
+                {"group_id":2},
                 ]
             
         }
@@ -324,7 +328,7 @@ Change Order Status [finished,canceled]:
         }
     }
     Return:{
-        {array of user orders}
+        {array of order details , array of invited, joined}
     }
     
 Get order details:
@@ -335,8 +339,126 @@ Get order details:
             Authorization: Barear {access_token which returned from login}
     }
     Return:{
-        array of order_details object
+       {
+    "order_details": [
+        {
+            "id": 3,
+            "order_id": 128,
+            "user_id": 2,
+            "comment": null,
+            "item_name": "fooool",
+            "amount": 1,
+            "price": 2,
+            "created_at": "2018-04-09T23:11:48.000Z",
+            "updated_at": "2018-04-09T23:11:48.000Z",
+            "user": {
+                "id": 2,
+                "name": "rania"
+            }
+        },
+        {
+            "id": 1,
+            "order_id": 128,
+            "user_id": 2,
+            "comment": null,
+            "item_name": "fooool",
+            "amount": 1,
+            "price": 2,
+            "created_at": "2018-04-09T23:10:31.000Z",
+            "updated_at": "2018-04-09T23:10:31.000Z",
+            "user": {
+                "id": 2,
+                "name": "rania"
+            }
+        }
+    ],
+    "joined": 0,
+    "invited": 0
+}
     }
-Get order users:
-    Method:GET
-    URL:http://localhost:3000/orders/list?order_id=133
+
+Get Order invited users
+  Method:GET
+    URL:http://localhost:3000/orders/invited?order_id=129
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Return:{
+        {
+            array of order_users {
+                    "id": 76,
+                    "user_id": 2,
+                    "order_id": 133,
+                    "created_at": "2018-04-10T12:39:06.000Z",
+                    "updated_at": "2018-04-10T12:39:06.000Z",
+                    "join": false,
+                    "user": {
+                        "id": 2,
+                        "name": "rania"
+                    }
+    }}
+    }
+
+Get Order joined users
+  Method:GET
+    URL:http://localhost:3000/orders/invited?order_id=129
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+    Return:{
+        {
+            array of order_users {
+                    "id": 76,
+                    "user_id": 2,
+                    "order_id": 133,
+                    "created_at": "2018-04-10T12:39:06.000Z",
+                    "updated_at": "2018-04-10T12:39:06.000Z",
+                    "join": false,
+                    "user": {
+                        "id": 2,
+                        "name": "rania"
+                    }
+    }}
+    }
+
+
+add order item
+    Method:POST
+    URL:http://localhost:3000/order_details/
+     
+    Headers:{
+            Content-Type:application/json
+            Authorization: Barear {access_token which returned from login}
+    }
+
+    Body:{
+        {
+            "order_detail":{
+            "order_id":128,
+            "user_id":2,
+            "item_name":"fooool",
+            "price":2,
+            "comment":"",
+            "amount":2
+         }
+         
+    Return:{
+        {
+            array of order_users {
+                    "id": 76,
+                    "user_id": 2,
+                    "order_id": 133,
+                    "created_at": "2018-04-10T12:39:06.000Z",
+                    "updated_at": "2018-04-10T12:39:06.000Z",
+                    "join": false,
+                    "user": {
+                        "id": 2,
+                        "name": "rania"
+                    }
+    }}
+    }
+ 
+}
+    }
